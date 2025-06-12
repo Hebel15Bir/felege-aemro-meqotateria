@@ -143,17 +143,17 @@ export async function verifyStudent(studentData) {
 		};
 	}
 
-	try {
-		const imageBuffer = await fetch(photoUrl).then((res) => res.arrayBuffer());
-		const filePath = `${fullName.replace('/', '_')}.jpg`;
-		const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
-		saveAs(imageBlob, `${filePath}`);
-	} catch (err) {
-		console.log(err);
-		return {
-			error: 'የተማሪው ምስል ወደ ኮምፒዩተርዎት አልወረደም። እባክዎ በድጋሚ ይሞክሩ።',
-		};
-	}
+	// try {
+	// 	const imageBuffer = await fetch(photoUrl).then((res) => res.arrayBuffer());
+	// 	const filePath = `${fullName.replace('/', '_')}.jpg`;
+	// 	const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
+	// 	saveAs(imageBlob, `${filePath}`);
+	// } catch (err) {
+	// 	console.log(err);
+	// 	return {
+	// 		error: 'የተማሪው ምስል ወደ ኮምፒዩተርዎት አልወረደም። እባክዎ በድጋሚ ይሞክሩ።',
+	// 	};
+	// }
 
 	const updateData = {
 		uniqueId: uniqueId,

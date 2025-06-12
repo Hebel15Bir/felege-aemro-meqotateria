@@ -4,7 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { connectToDatabase, disconnectDatabase } from './db';
 import { Registrant } from './models';
 import { todayEthCalendar } from '../other/util';
-import fs from 'fs/promises';
+import { saveAs } from 'file-saver';
 
 cloudinary.config({
 	cloud_name: 'dxmwtld0d',
@@ -145,8 +145,9 @@ export async function verifyStudent(studentData) {
 
 	try {
 		const imageBuffer = await fetch(photoUrl).then((res) => res.arrayBuffer());
-		const filePath = `./public/students/${fullName.replace('/', '_')}.jpg`;
-		await fs.writeFile(filePath, Buffer.from(imageBuffer));
+		const filePath = `${fullName.replace('/', '_')}.jpg`;
+		const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' }]);
+		saveAs(imageBlob, `${filePath}`);
 	} catch (err) {
 		console.log(err);
 		return {

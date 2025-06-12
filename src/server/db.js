@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI =
-	// 'mongodb+srv://bekemefekede1215:X4B0uuVfI144sM78@cluster0.tkewolw.mongodb.net/gubae';
-	'mongodb://localhost:27017/gubae';
+	'mongodb+srv://bekemefekede1215:X4B0uuVfI144sM78@cluster0.tkewolw.mongodb.net/gubae';
 
 export async function connectToDatabase() {
 	console.log('connecting...');

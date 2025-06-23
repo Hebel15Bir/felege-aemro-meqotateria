@@ -41,7 +41,7 @@ export default function VerifyOne({ student, onRegister }: VerifyOneProps) {
 		setIsLoading(true);
 
 		try {
-			await verifyStudent(student, isNew, name);
+			await verifyStudent(state, isNew, name);
 			onRegister(student.id);
 		} catch (err) {
 			console.log(err);

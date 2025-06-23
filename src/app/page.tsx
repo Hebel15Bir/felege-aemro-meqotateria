@@ -2,6 +2,8 @@ import Downloader from '@/components/Downloader';
 import StudentsList from '@/components/StudentsList';
 import { classes } from '@/util/consts';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
 	return (
 		<div className='flex flex-col justify-center items-center max-w-3xl mx-auto'>

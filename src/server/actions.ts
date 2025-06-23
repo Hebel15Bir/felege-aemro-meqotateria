@@ -4,7 +4,6 @@ import { IDDetailProps, Stats, VerifiedDetails } from '@/util/types';
 import { connectToDatabase } from './db';
 import { Registrant } from './model';
 import { classes } from '@/util/consts';
-import { revalidatePath } from 'next/cache';
 
 export async function getStudents(
 	type: 'new' | 'all',
@@ -78,9 +77,6 @@ export async function verifyStudent(
 		new: true,
 		runValidators: true,
 	}).exec();
-
-	revalidatePath('/');
-	revalidatePath('/verify');
 }
 
 export async function getToBePrinted(): Promise<IDDetailProps[]> {

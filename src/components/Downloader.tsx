@@ -3,41 +3,40 @@
 import { getAttendance } from '@/server/actions';
 import { saveAs } from 'file-saver';
 import { useState } from 'react';
+import ExcelJs from 'exceljs';
 
 export default function Downloader() {
 	const [errors, setErrors] = useState<string[]>([]);
 	const handleDownload = async () => {
 		setErrors([]);
 		const attendance = await getAttendance();
+		const workbook = new ExcelJs.Workbook();
 		for (const classroom of attendance) {
 			const data = classroom.data;
 			if (data.length === 0) {
-				setErrors([...errors, `የ${classroom.classroom}ን ተማሪዎች ማግኘት አልተቻለም።`]);
-				return;
+				setErrors([...errors, `የ${classroom.name}ን ተማሪዎች ማግኘት አልተቻለም።`]);
+				continue;
 			}
-
-			const headers = ['ቍጥር', 'ሙሉ ስም', 'ዕድሜ', 'ደረሰኝ ቍጥር', 'ስልክ ቍጥር'];
-			const dataHeaders = Object.keys(data[0]);
-
-			const csvRows = [
-				headers.join(','),
-				...data.map((row, index) =>
-					[
-						`${index + 1}`,
-						...dataHeaders.map((field) => {
-							const value = row[field as keyof typeof row];
-							return value;
-						}),
-					].join(',')
-				),
+			const sheet = workbook.addWorksheet(classroom.name);
+			sheet.columns = [
+				{ header: 'ሙሉ ስም', key: 'name', width: 30 },
+				{ header: 'መለያ ቍጥር', key: 'uniqueId', width: 10 },
+				{ header: 'ዕድሜ', key: 'age', width: 8 },
+				{ header: 'ስልክ ቍጥር', key: 'phoneNo', width: 20 },
+				{ header: 'ደረሰኝ ቍጥር', key: 'paymentId', width: 15 },
 			];
 
-			const csvString = csvRows.join('\n');
-
-			const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-			saveAs(blob, `የ${classroom.classroom} ተማሪዎች ዝርዝር.csv`);
+			for (const student of data) {
+				sheet.addRow(student);
+			}
 		}
+		const buffer = await workbook.xlsx.writeBuffer();
+		const blob = new Blob([buffer], {
+			type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		});
+		saveAs(blob, `የተማሪዎች ዝርዝር.xlsx`);
 	};
+
 
 	return (
 		<>

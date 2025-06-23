@@ -71,9 +71,7 @@ export async function verifyStudent(
 		verifiedDate: new Date(),
 		confirmStatus: 'verified',
 		isNewStudent: isNew,
-		'classDetails.classroom': student.classDetails.classroom,
-		'classDetails.classTime': student.classDetails.classTime,
-		'classDetails.subject': student.classDetails.subject,
+		classDetails: student.classDetails
 	};
 
 	await Registrant.findByIdAndUpdate(student.id, updateData, {
@@ -126,12 +124,15 @@ export async function confirmPrinted(students: IDDetailProps[]) {
 }
 
 export async function getAttendance() {
+	const times = ['የማታ', 'የሌሊት', 'የጠዋት'];
+	const studentData = [];
 	await connectToDatabase();
-	const studentData = await Promise.all(
-		classes.map(async (classroom) => {
+	for (const clsrm of classes) {
+		for (const tm of times) {
 			const classData = await Registrant.find({
 				confirmStatus: { $in: ['verified', 'printed'] },
-				'classDetails.classroom': classroom,
+				'classDetails.classroom': clsrm,
+				'classDetails.classTime': tm,
 			});
 
 			const students = classData.map((student) => {
@@ -144,8 +145,13 @@ export async function getAttendance() {
 				};
 			});
 
-			return { classroom, data: students };
-		})
-	);
+			if (students.length !== 0) {
+				studentData.push({
+					name: `${clsrm} ${tm}`,
+					data: students,
+				});
+			}
+		}
+	}
 	return studentData;
 }

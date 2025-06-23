@@ -7,6 +7,8 @@ export const metadata: Metadata = {
 		'ይህ በመካነ ሰማዕት ቅዱስ ቂርቆስ ቤተ ክርስቲያን የፈለገ አእምሮ ጉባኤ ቤት መመዝገቢያና መቆጣጠሪያ ገጽ ነው።',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
